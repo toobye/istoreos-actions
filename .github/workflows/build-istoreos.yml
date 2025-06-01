@@ -9,7 +9,7 @@ on:
         required: false
         default: 'false'
   schedule:
-   - cron: 0 16 * * *
+   - cron: 0 1 * * *
 
 env:
   REPO_URL: https://github.com/istoreos/istoreos
@@ -31,7 +31,7 @@ jobs:
       matrix:
         REPO_BRANCH:
           # - main
-          - istoreos-22.03
+          - istoreos-24.10
           # - istoreos-23.05
         ARCHITECTURE:
           - rk33xx
@@ -40,8 +40,8 @@ jobs:
         os:
           - ubuntu-22.04
         include:
-          - REPO_BRANCH: istoreos-23.05
-            ARCHITECTURE: x86-alpha
+          - REPO_BRANCH: istoreos-24.10
+            ARCHITECTURE: x86
             os: ubuntu-22.04
 
       fail-fast: false
