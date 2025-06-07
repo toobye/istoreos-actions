@@ -9,7 +9,7 @@ on:
         required: false
         default: 'false'
   schedule:
-   - cron: 0 16 * * *
+   - cron: 0 1 * * *
 
 env:
   REPO_URL: https://github.com/istoreos/istoreos
@@ -31,17 +31,17 @@ jobs:
       matrix:
         REPO_BRANCH:
           # - main
-          - istoreos-22.03
+          - istoreos-24.10
           # - istoreos-23.05
         ARCHITECTURE:
-          - rk33xx
-          - rk35xx
+         # - rk33xx
+         # - rk35xx
           - x86
         os:
           - ubuntu-22.04
         include:
-          - REPO_BRANCH: istoreos-23.05
-            ARCHITECTURE: x86-alpha
+          - REPO_BRANCH: istoreos-24.10
+            ARCHITECTURE: x86
             os: ubuntu-22.04
 
       fail-fast: false
@@ -85,15 +85,15 @@ jobs:
         sudo -E apt-get -qq clean
         echo "------------------------------- 设置工作目录及时区 -------------------------------"
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
+        sudo mkdir -p /mnt/workdir
+        sudo chown $USER:$GROUPS /mnt/workdir
 
     - name: 克隆源码
-      working-directory: /workdir
+      working-directory: /mnt/workdir
       run: |
         df -hT $PWD
         git clone $REPO_URL -b ${{ matrix.REPO_BRANCH }} openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        ln -sf /mnt/workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: 缓存构建动作
       uses: klever1988/cachewrtbuild@main
@@ -133,6 +133,7 @@ jobs:
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
 
     - name: 下载软件包
       id: package
